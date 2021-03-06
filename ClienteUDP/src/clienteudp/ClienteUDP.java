@@ -46,7 +46,7 @@ public class ClienteUDP implements Runnable {
 
         try {
             udpSocket = new DatagramSocket();
-            byte[] buffer = new byte[32000];
+            byte[] buffer = new byte[8096];
 
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, adress, port);
@@ -78,7 +78,7 @@ public class ClienteUDP implements Runnable {
                 System.out.println("creando img");
                 ByteArrayInputStream myStream = new ByteArrayInputStream(outputStream.toByteArray());
                 BufferedImage bImage = ImageIO.read(myStream);
-                ImageIO.write(bImage, "jpg", new File("C:\\Users\\javie\\Desktop\\6TO-SEMESTRE\\Sistemas-Distribuidos\\Parcial-Dos\\ServidorDeArchivos\\picture1.jpg"));
+                ImageIO.write(bImage, "jpg", new File("picture1.jpg"));
                 System.out.println("image created");
                 
                 
