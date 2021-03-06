@@ -65,9 +65,9 @@ public class MultiServerRunnable implements Runnable {
 
                 //calcular numero de segmentos a enviar
                 int numeroSegmentos = (int) myFile.length() / this.BUFFER_SIZE;
-
+                System.out.println("size file " + myFile.length());
                 //obtener el numero de segmentos en un array de bytes
-                byte[] np = numeroPaquetesToBytes(numeroSegmentos);
+                byte[] np = numeroPaquetesToBytes(numeroSegmentos + 1);
 
                 //empaqutar el numero de segmentos al client que enviara el server
                 clientpacket = new DatagramPacket(np, np.length, clientpacket.getAddress(), clientpacket.getPort());
@@ -83,21 +83,17 @@ public class MultiServerRunnable implements Runnable {
                     int from = contadorSegmentos * this.BUFFER_SIZE;
                     int to = (contadorSegmentos + 1) * this.BUFFER_SIZE;
                     int i = 0;
-                      
+
                     //se crea un segmento
                     while (from < to) {
                         sendBuffer[i] = bytesFile[from];
                         from++;
                         i++;
                     }
-                    
-                    i = 0;
-                    contadorSegmentos++;
-                    if(contadorSegmentos<numeroSegmentos){
-                        System.out.println("es el ultimo segmento");
-                    }
+
+                    //crear segmento quesele enviara al cliente
                     clientpacket = new DatagramPacket(sendBuffer, sendBuffer.length, clientpacket.getAddress(), clientpacket.getPort());
-                    
+
                     try {
 
                         Thread.sleep(500);
@@ -105,11 +101,23 @@ public class MultiServerRunnable implements Runnable {
                     } catch (InterruptedException e) {
                     }
 
-                    System.out.println("enviando paquete " + contadorSegmentos + "/" + numeroSegmentos);
+                    contadorSegmentos++;
+                    System.out.println("enviando paquete " + contadorSegmentos + "/" + (numeroSegmentos + 1));
+
+                    //enviar fragmento faltante, esto se hace porque el ultimo block es muy pequenio
+                    if (contadorSegmentos == numeroSegmentos) {
+
+                        byte[] smallPaquete = sendSmallPaquete(from, bytesFile.length, bytesFile);
+
+                        //crear ultimo segmento quesele enviara al cliente
+                        clientpacket = new DatagramPacket(smallPaquete, smallPaquete.length, clientpacket.getAddress(), clientpacket.getPort());
+
+                        //enviar ultimo fragmento
+                        this.socket.send(clientpacket);
+                        System.out.println("enviando paquete " + (contadorSegmentos + 1) + "/" + (numeroSegmentos + 1));
+                    }
                 }
 
-                // System.out.println("image download");
-                // this.socket.send(ServerPacket);
             }
         } catch (SocketException ex) {
             Logger.getLogger(MultiServerRunnable.class.getName()).log(Level.SEVERE, null, ex);
@@ -126,6 +134,20 @@ public class MultiServerRunnable implements Runnable {
         encodedValue[1] = (byte) (value >> Byte.SIZE);
         encodedValue[0] = (byte) value;
         return encodedValue;
+    }
+
+    //metodo que sirve para calcular lo que sobro del file y enviarlo al cliente
+    private byte[] sendSmallPaquete(int from, int to, byte[] bytesFile) {
+        byte[] array = new byte[to - from];
+
+        int i = 0;
+        while (from < to) {
+            array[i] = bytesFile[from];
+            from++;
+            i++;
+        }
+        return array;
+
     }
 
 }
