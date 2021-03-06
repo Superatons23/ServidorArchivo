@@ -77,10 +77,10 @@ public class ClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonDescargarActionPerformed
 
     
-    
-    public void start(){
+    public void startExecutor(){
         try {
             this.service.execute(this.clienteUDP=new ClienteUDP(this, InetAddress.getLocalHost(),4444));
+            
         } catch (UnknownHostException ex) {
             Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -16,8 +16,11 @@ public class Main {
      */
     public static void main(String[] args) {
       ClienteFrame cliente = new ClienteFrame();
-      cliente.start();
+      cliente.startExecutor();
+     
+      
       cliente.setVisible(true);
+      
     }
     
 }
