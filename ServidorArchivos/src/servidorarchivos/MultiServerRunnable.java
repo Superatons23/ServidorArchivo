@@ -55,7 +55,7 @@ public class MultiServerRunnable implements Runnable {
                 System.out.println("reciviendo data from client");
 
                 //obtener el archivo a enviar
-                File myFile = new File("descarga0.jpg");
+                File myFile = new File("descarga0.png");
 
                 //arrelgo de bytes a enviar al client
                 byte[] sendBuffer = new byte[this.BUFFER_SIZE];
@@ -65,7 +65,7 @@ public class MultiServerRunnable implements Runnable {
 
                 //calcular numero de segmentos a enviar
                 int numeroSegmentos = (int) myFile.length() / this.BUFFER_SIZE;
-                System.out.println("size file " + myFile.length());
+
                 //obtener el numero de segmentos en un array de bytes
                 byte[] np = numeroPaquetesToBytes(numeroSegmentos + 1);
 

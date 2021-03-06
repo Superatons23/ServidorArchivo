@@ -50,7 +50,7 @@ public class ClienteUDP implements Runnable {
 
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, adress, port);
-
+                 
                 // recibir el numero de segmentos a recibir
                 udpSocket.receive(packet);
 
@@ -78,17 +78,9 @@ public class ClienteUDP implements Runnable {
                 System.out.println("creando img");
                 ByteArrayInputStream myStream = new ByteArrayInputStream(outputStream.toByteArray());
                 BufferedImage bImage = ImageIO.read(myStream);
-                ImageIO.write(bImage, "jpg", new File("picture1.jpg"));
+                ImageIO.write(bImage, "png", new File("picture1.png"));
                 System.out.println("image created");
-                
-                
-                
-//                System.out.println("reciviendo data from server");
-//                buffer = packet.getData();
-//                ByteArrayInputStream myStream = new ByteArrayInputStream(buffer);
-//                BufferedImage bImage = ImageIO.read(myStream);
-//                ImageIO.write(bImage, "jpg", new File("C:\\Users\\javie\\Desktop\\6TO-SEMESTRE\\Sistemas-Distribuidos\\Parcial-Dos\\ServidorDeArchivos\\picture1.jpg"));
-//                System.out.println("image download");
+
             }
             //udpSocket.close();
         } catch (SocketException ex) {
@@ -106,7 +98,7 @@ public class ClienteUDP implements Runnable {
             buffer = message.getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, adress, port);
             System.out.println("enviando data to server");
-            udpSocket.send(packet);
+            this.udpSocket.send(packet);
         } catch (UnknownHostException ex) {
             Logger.getLogger(ClienteUDP.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
