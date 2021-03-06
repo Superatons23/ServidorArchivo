@@ -30,7 +30,7 @@ public class MultiServerRunnable implements Runnable {
 
     private final int PORT;
     private DatagramSocket socket;
-    private static final int BUFFER_SIZE = 32000;
+    private static final int BUFFER_SIZE = 8096;
 
     public MultiServerRunnable(int port) {
         this.PORT = port;
@@ -55,7 +55,7 @@ public class MultiServerRunnable implements Runnable {
                 System.out.println("reciviendo data from client");
 
                 //obtener el archivo a enviar
-                File myFile = new File("C:\\Users\\javie\\Desktop\\6TO-SEMESTRE\\Sistemas-Distribuidos\\Parcial-Dos\\ServidorDeArchivos\\descarga0.jpg");
+                File myFile = new File("descarga0.jpg");
 
                 //arrelgo de bytes a enviar al client
                 byte[] sendBuffer = new byte[this.BUFFER_SIZE];

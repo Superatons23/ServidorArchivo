@@ -22,6 +22,8 @@ public class ServerExecute {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+         final String dir = System.getProperty("user.dir");
+        System.out.println("current dir = " + dir);
         Executor service = Executors.newFixedThreadPool(2);
         int port = 4444;
       
