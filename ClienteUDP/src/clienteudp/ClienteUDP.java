@@ -63,17 +63,14 @@ public class ClienteUDP implements Runnable {
                 //numero de paquetes recibidos
                 int npr = 0;
 
-                //var para ir almacenando los bytes que recibamos desde el server
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
+                FileOutputStream testFile = new FileOutputStream(new File("picture.png"));
                 //recibir paquetes
                 while (npr < np) {
 
                     udpSocket.receive(packet);
 
                     //guardar arrays de bytes en outputStream
-                    outputStream.write(packet.getData());
-
+                    testFile.write(packet.getData());
                     //aumentar el numero de paquetes recibidos
                     npr++;
 
@@ -82,18 +79,13 @@ public class ClienteUDP implements Runnable {
                     //para que avance el progress bar
                     this.jframe.jProgressBar.setValue(npr);
                 }
-                
-                System.out.println("creando img");
-                ByteArrayInputStream myStream = new ByteArrayInputStream(outputStream.toByteArray());
-                BufferedImage bImage = ImageIO.read(myStream);
-                ImageIO.write(bImage, "png", new File("picture1.png"));
-                System.out.println("image created");
-                
+                testFile.close();
+
                 //borrar progreso de la barra 
                 this.jframe.jProgressBar.setValue(0);
 
             }
-            //udpSocket.close();
+
         } catch (SocketException ex) {
             Logger.getLogger(ClienteUDP.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

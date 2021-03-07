@@ -41,13 +41,16 @@ public class MultiServerClient implements Runnable {
                 File myFile = new File("descarga0.png");
 
                 //arrelgo de bytes a enviar al client
-                byte[] sendBuffer = new byte[this.BUFFER_SIZE];
+                byte[] sendBuffer = new byte[BUFFER_SIZE];
+
+                //arrelgo de bytes a enviar al client
+                byte[] test = new byte[BUFFER_SIZE];
 
                 //guardar el array del file
                 byte[] bytesFile = Files.readAllBytes(myFile.toPath());
 
                 //calcular numero de segmentos a enviar
-                int numeroSegmentos = (int) myFile.length() / this.BUFFER_SIZE;
+                int numeroSegmentos = (int) myFile.length() / BUFFER_SIZE;
 
                 //obtener el numero de segmentos en un array de bytes
                 byte[] np = numeroPaquetesToBytes(numeroSegmentos + 1);
@@ -63,23 +66,17 @@ public class MultiServerClient implements Runnable {
 
                 while (contadorSegmentos < numeroSegmentos) {
 
-                    int from = contadorSegmentos * this.BUFFER_SIZE;
-                    int to = (contadorSegmentos + 1) * this.BUFFER_SIZE;
-                    int i = 0;
+                    int from = contadorSegmentos * BUFFER_SIZE;
 
-                    //se crea un segmento
-                    while (from < to) {
-                        sendBuffer[i] = bytesFile[from];
-                        from++;
-                        i++;
-                    }
+                    //extraer segmento que se le enviara al client
+                    System.arraycopy(bytesFile, from, test, 0, BUFFER_SIZE);
 
-                    //crear segmento quesele enviara al cliente
-                    clientpacket = new DatagramPacket(sendBuffer, sendBuffer.length, clientpacket.getAddress(), clientpacket.getPort());
+                    //crear datagramPacket quesele enviara al cliente
+                    clientpacket = new DatagramPacket(test, test.length, clientpacket.getAddress(), clientpacket.getPort());
 
                     try {
 
-                        Thread.sleep(300);
+                        Thread.sleep(30);
                         this.socket.send(clientpacket);
                     } catch (InterruptedException e) {
                     }
@@ -100,6 +97,7 @@ public class MultiServerClient implements Runnable {
                         System.out.println("enviando paquete " + (contadorSegmentos + 1) + "/" + (numeroSegmentos + 1));
                     }
                 }
+                //terminar el thread
                 finished = true;
             }
         } catch (SocketException ex) {
@@ -114,12 +112,9 @@ public class MultiServerClient implements Runnable {
     private byte[] sendSmallPaquete(int from, int to, byte[] bytesFile) {
         byte[] array = new byte[to - from];
 
-        int i = 0;
-        while (from < to) {
-            array[i] = bytesFile[from];
-            from++;
-            i++;
-        }
+        //extraer ultimo segmento que se le enviara al client
+        System.arraycopy(bytesFile, from, array, 0, (to - from));
+
         return array;
 
     }
