@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JProgressBar;
 
 /**
  *
@@ -42,6 +43,7 @@ public class ClienteFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jButtonDescargar = new javax.swing.JButton();
+        jProgressBar = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,16 +59,23 @@ public class ClienteFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(132, 132, 132)
-                .addComponent(jButtonDescargar)
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(jButtonDescargar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(jProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(217, Short.MAX_VALUE)
                 .addComponent(jButtonDescargar)
-                .addGap(60, 60, 60))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -80,7 +89,7 @@ public class ClienteFrame extends javax.swing.JFrame {
     public void startExecutor(){
         try {
             this.service.execute(this.clienteUDP=new ClienteUDP(this, InetAddress.getLocalHost(),4444));
-            
+           
         } catch (UnknownHostException ex) {
             Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,5 +101,6 @@ public class ClienteFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDescargar;
+    public javax.swing.JProgressBar jProgressBar;
     // End of variables declaration//GEN-END:variables
 }

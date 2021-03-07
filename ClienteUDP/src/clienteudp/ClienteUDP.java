@@ -28,13 +28,13 @@ import javax.swing.JFrame;
  */
 public class ClienteUDP implements Runnable {
 
-    private JFrame jframe;
+    private ClienteFrame jframe;
     InetAddress adress;
     int port;
 
     DatagramSocket udpSocket;
 
-    public ClienteUDP(JFrame frame, InetAddress adress, int port) {
+    public ClienteUDP(ClienteFrame frame, InetAddress adress, int port) {
         this.jframe = frame;
         this.port = port;
         this.adress = adress;
@@ -50,36 +50,47 @@ public class ClienteUDP implements Runnable {
 
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, adress, port);
-                 
+
                 // recibir el numero de segmentos a recibir
                 udpSocket.receive(packet);
 
                 //convertir el numero de paquetes de byte to int
                 int np = bytesToNumeroPaquetes(packet.getData());
 
+                //asignarle al progress bar del jFrame  el numero maximo de paquetes
+                this.jframe.jProgressBar.setMaximum(np);
+
                 //numero de paquetes recibidos
                 int npr = 0;
 
                 //var para ir almacenando los bytes que recibamos desde el server
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-              
+
                 //recibir paquetes
                 while (npr < np) {
 
-                
                     udpSocket.receive(packet);
 
                     //guardar arrays de bytes en outputStream
                     outputStream.write(packet.getData());
 
+                    //aumentar el numero de paquetes recibidos
                     npr++;
+
                     System.out.println("recibiendo paquete " + npr + "/" + np);
+
+                    //para que avance el progress bar
+                    this.jframe.jProgressBar.setValue(npr);
                 }
+                
                 System.out.println("creando img");
                 ByteArrayInputStream myStream = new ByteArrayInputStream(outputStream.toByteArray());
                 BufferedImage bImage = ImageIO.read(myStream);
                 ImageIO.write(bImage, "png", new File("picture1.png"));
                 System.out.println("image created");
+                
+                //borrar progreso de la barra 
+                this.jframe.jProgressBar.setValue(0);
 
             }
             //udpSocket.close();
