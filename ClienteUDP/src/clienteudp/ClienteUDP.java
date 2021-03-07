@@ -28,7 +28,7 @@ import javax.swing.JFrame;
  */
 public class ClienteUDP implements Runnable {
 
-    private ClienteFrame jframe;
+    private final ClienteFrame jframe;
     InetAddress adress;
     int port;
 

@@ -5,12 +5,10 @@
  */
 package servidorarchivos;
 
-import java.io.IOException;
-import java.net.ServerSocket;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -24,7 +22,7 @@ public class ServerExecute {
     public static void main(String[] args) {
          final String dir = System.getProperty("user.dir");
         System.out.println("current dir = " + dir);
-        Executor service = Executors.newFixedThreadPool(2);
+        Executor service = Executors.newSingleThreadExecutor();
         int port = 4444;
       
 

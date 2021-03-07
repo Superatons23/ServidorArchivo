@@ -23,14 +23,13 @@ public class ClienteFrame extends javax.swing.JFrame {
     /**
      * Creates new form ClienteFrame
      */
-    
     private Executor service;
     private ClienteUDP clienteUDP;
-    
+
     public ClienteFrame() {
         initComponents();
-          service = Executors.newCachedThreadPool();
-          
+        service = Executors.newCachedThreadPool();
+
     }
 
     /**
@@ -82,22 +81,18 @@ public class ClienteFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonDescargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDescargarActionPerformed
-             this.clienteUDP.send("hola server");
+        this.clienteUDP.send("hola server");
     }//GEN-LAST:event_jButtonDescargarActionPerformed
 
-    
-    public void startExecutor(){
+    public void startExecutor() {
         try {
-            this.service.execute(this.clienteUDP=new ClienteUDP(this, InetAddress.getLocalHost(),4444));
-           
+
+            this.service.execute(this.clienteUDP = new ClienteUDP(this, InetAddress.getLocalHost(), 4444));
         } catch (UnknownHostException ex) {
             Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
-   
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDescargar;
